@@ -1,7 +1,9 @@
 import javax.inject.Inject;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,10 +19,12 @@ public class TweetCollectorResource {
      * @return 200 OK no caso de successo ou 500 em caso de falha
      */
     @GET
-    public Response start() {
+    public Response start(@DefaultValue("Flamengo") @QueryParam("q") String query) {
         Response r = null;
+
+        logger.info("stream filter: " + query);
         try {
-            manager.start();
+            manager.start(query);
             r = Response.ok("Coletor de Twitter iniciado")
                     .build();
         } catch (Exception ex) {
